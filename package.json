@@ -8,12 +8,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@3rdweb/hooks": "^1.8.0",
+    "@3rdweb/react": "^1.8.1",
+    "@3rdweb/sdk": "^1.36.1",
+    "@web3-react/core": "^6.1.9",
+    "@web3-react/injected-connector": "^6.0.7",
+    "ethers": "^5.5.3",
     "next": "12.0.8",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },
   "devDependencies": {
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
     "eslint": "8.7.0",
-    "eslint-config-next": "12.0.8"
+    "eslint-config-next": "12.0.8",
+    "postcss-preset-env": "^7.2.3",
+    "tailwindcss": "^3.0.15",
+    "typescript": "^4.5.4",
+    "typescript-plugin-css-modules": "^3.4.0"
   }
 }
