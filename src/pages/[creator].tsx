@@ -8,6 +8,8 @@ import React from 'react';
 
 interface Props {}
 
-export const CreatorPage = (props: Props) => {
+const CreatorPage = (props: Props) => {
   return <div></div>;
 };
+
+export default CreatorPage;

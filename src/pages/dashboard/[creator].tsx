@@ -9,6 +9,8 @@ import React from 'react';
 
 interface Props {}
 
-export const CreatorDashboardPage = (props: Props) => {
+const CreatorDashboardPage = (props: Props) => {
   return <div></div>;
 };
+
+export default CreatorDashboardPage;

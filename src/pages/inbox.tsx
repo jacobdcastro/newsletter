@@ -8,6 +8,8 @@ import React from 'react';
 
 interface Props {}
 
-export const InboxPage = (props: Props) => {
+const InboxPage = (props: Props) => {
   return <div></div>;
 };
+
+export default InboxPage;

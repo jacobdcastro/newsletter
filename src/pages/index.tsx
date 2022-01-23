@@ -11,7 +11,7 @@ import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import { ConnectWallet } from '../components/ConnectWallet';
 
-export default function Home() {
+const IndexPage = () => {
   return (
     <div className={styles.container}>
       {/* @ts-ignore */}
@@ -79,4 +79,6 @@ export default function Home() {
       </footer>
     </div>
   );
-}
+};
+
+export default IndexPage;
