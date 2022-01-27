@@ -10,8 +10,15 @@ import Image from 'next/image';
 // @ts-ignore
 import styles from '../styles/Home.module.css';
 import { ConnectWallet } from '../components/ConnectWallet';
+import { usePublication } from '../hooks/usePublication';
+import { useRoles } from '../hooks/useRoles';
+import { useCreatorSignup } from '../hooks/useCreatorSignup';
 
 const IndexPage = () => {
+  const { getAllIssues, createAirdrop } = usePublication();
+  const { removeMinter } = useRoles();
+  const { createPublication } = useCreatorSignup();
+
   return (
     <div className={styles.container}>
       {/* @ts-ignore */}
@@ -25,6 +32,11 @@ const IndexPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href='https://nextjs.org'>Next.js!</a>
         </h1>
+
+        <button onClick={createPublication}>Create Weekly Publication</button>
+        <button onClick={getAllIssues}>Get All NFTs</button>
+        <button onClick={createAirdrop}>Create New Issue</button>
+        <button onClick={() => removeMinter('')}>Roles</button>
 
         <p className={styles.description}>
           Get started by editing{' '}

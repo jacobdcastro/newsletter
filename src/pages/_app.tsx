@@ -2,13 +2,10 @@ import React from 'react';
 import { AppProps } from 'next/app';
 import { ThirdwebWeb3Provider } from '@3rdweb/hooks';
 import '../styles/globals.css';
+import SdkContextProvider from '../utils/SdkContext';
 
 const supportedChainIds = [
-  1, // mainnet
-  3, // ropsten
   4, // rinkeby
-  137, // polygon mainnet
-  80001, // polygon mumbai
 ];
 
 const connectors = {
@@ -28,7 +25,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       connectors={connectors}
       supportedChainIds={supportedChainIds}
     >
-      <Component {...pageProps} />
+      <SdkContextProvider>
+        <Component {...pageProps} />
+      </SdkContextProvider>
     </ThirdwebWeb3Provider>
   );
 }

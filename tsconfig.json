@@ -16,5 +16,5 @@
     "isolatedModules": true
   },
   "exclude": ["next.config.js", "postcss.config.js", "tailwind.config.js"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/web3/1-init-sdk.ts"]
 }
