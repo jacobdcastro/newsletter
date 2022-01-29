@@ -5,7 +5,9 @@ import { useHover } from '../../hooks/useHover';
 
 const ConnectWallet = () => {
   const [isHovered, hoveredProps] = useHover();
-  const { connectWallet, disconnectWallet, connectors, address } = useWeb3();
+  const { connectWallet, disconnectWallet, address } = useWeb3();
+
+  const isSignedIn = address !== undefined;
 
   return (
     <div className={s.root}>

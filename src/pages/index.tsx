@@ -10,14 +10,12 @@ import Image from 'next/image';
 // @ts-ignore
 import styles from '../styles/Home.module.css';
 import { ConnectWallet } from '../components/ConnectWallet';
-import { usePublication } from '../hooks/usePublication';
-import { useRoles } from '../hooks/useRoles';
+// import { usePublication } from '../hooks/useCreator';
 import { useCreatorSignup } from '../hooks/useCreatorSignup';
+import MyComponent from '../components/MyComponent';
 
 const IndexPage = () => {
-  const { getAllIssues, createAirdrop } = usePublication();
-  const { removeMinter } = useRoles();
-  const { createPublication } = useCreatorSignup();
+  // const { getAllIssues, createAirdrop } = usePublication();
 
   return (
     <div className={styles.container}>
@@ -33,11 +31,6 @@ const IndexPage = () => {
           Welcome to <a href='https://nextjs.org'>Next.js!</a>
         </h1>
 
-        <button onClick={createPublication}>Create Weekly Publication</button>
-        <button onClick={getAllIssues}>Get All NFTs</button>
-        <button onClick={createAirdrop}>Create New Issue</button>
-        <button onClick={() => removeMinter('')}>Roles</button>
-
         <p className={styles.description}>
           Get started by editing{' '}
           <code className={styles.code}>pages/index.js</code>
@@ -45,6 +38,8 @@ const IndexPage = () => {
 
         {/* =========== */}
         <ConnectWallet />
+
+        <MyComponent />
         {/* =========== */}
 
         <div className={styles.grid}>
