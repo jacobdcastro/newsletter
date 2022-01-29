@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@components/*": ["src/components/*"],
+      "@components/*": ["src/components/*"]
     },
     "target": "ES2016",
     "module": "CommonJS",

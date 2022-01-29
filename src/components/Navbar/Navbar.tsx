@@ -1,18 +1,20 @@
-import React from 'react'
-import s from './Navbar.module.css'
-import { useState } from 'react'
+import React from 'react';
+import s from './Navbar.module.css';
+import { useState } from 'react';
 
 const Navbar = () => {
-  const [active, setActive] = useState(true)
+  const [active, setActive] = useState(true);
 
   const handleClick = () => {
-    setActive(!active)
-  }
+    setActive(!active);
+  };
 
   return (
     <nav className={s.navcontainer}>
       <div className={s.narvbar}>
-        <a href="/"><span className={s.title}>NewsNFT</span></a>
+        <a href="/">
+          <span className={s.title}>NewsNFT</span>
+        </a>
       </div>
 
       <div className={s.toggle}>
@@ -45,7 +47,7 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

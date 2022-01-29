@@ -5,17 +5,17 @@
 //  * @wallet   Required
 //  */
 
-import React from 'react'
-import Head from 'next/head'
-import Image from 'next/image'
+import React from 'react';
+import Head from 'next/head';
+import Image from 'next/image';
 // @ts-ignore
-import styles from '../../styles/Home.module.css'
-import { ConnectWallet } from '../../components/ConnectWallet'
-import { SubmitButton } from '../../components/SubmitButton'
-import { Navbar } from '../../components/Navbar'
-import { Pfp } from '../../components/Pfp'
-import { Socials } from '../../components/Socials'
-import { NewsNFTCollection } from '../../components/NewsNFTCollection'
+import styles from '../../styles/Home.module.css';
+import { ConnectWallet } from '../../components/ConnectWallet';
+import { SubmitButton } from '../../components/SubmitButton';
+import { Navbar } from '../../components/Navbar';
+import { Pfp } from '../../components/Pfp';
+import { Socials } from '../../components/Socials';
+import { NewsNFTCollection } from '../../components/NewsNFTCollection';
 
 interface Props {}
 
@@ -73,7 +73,7 @@ const SubscriberDashboardPage = (props: Props) => {
         </a>
       </footer>
     </div>
-  )
-}
+  );
+};
 
-export default SubscriberDashboardPage
+export default SubscriberDashboardPage;

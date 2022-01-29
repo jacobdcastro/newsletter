@@ -1,6 +1,6 @@
 module.exports = {
   content: [
-    "./src/**/*.{html,tsx}",
+    './src/**/*.{html,tsx}',
     './components/**/*.{html,tsx}',
     './pages/**/*.{html,tsx}',
     './index.html',
@@ -10,4 +10,4 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-}
+};

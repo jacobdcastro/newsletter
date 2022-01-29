@@ -1,4 +1,4 @@
-import s from './Socials.module.css'
+import s from './Socials.module.css';
 
 export const Socials = () => (
   <div className={s.socialsContainer}>
@@ -20,5 +20,5 @@ export const Socials = () => (
       </li>
     </ul>
   </div>
-)
-export default Socials
+);
+export default Socials;
