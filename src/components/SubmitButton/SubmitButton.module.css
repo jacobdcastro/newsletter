@@ -1,0 +1,11 @@
+.root {
+  @apply flex flex-col justify-center items-center;
+}
+
+.submitButton {
+  @apply p-3 border-2 rounded-full bg-gradient-to-r from-blue-800 via-blue-700 to-blue-600 h-8 flex flex-col justify-center items-center;
+}
+
+.buttonText {
+  @apply text-xs text-white font-semibold;
+}
