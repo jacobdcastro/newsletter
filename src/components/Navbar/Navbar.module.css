@@ -1,0 +1,42 @@
+
+.root {
+    @apply flex items-center justify-between flex-wrap;
+}
+
+.toggle {
+    @apply block lg:hidden;
+}
+
+.navcontainer {
+    @apply flex items-center justify-between flex-wrap bg-white py-6 px-5  ;
+}
+
+.navbar {
+    @apply flex items-center flex-shrink-0 text-black;
+}
+
+
+.toggleicon {
+    @apply fill-current h-3 w-3;
+}
+
+.title {
+    @apply font-semibold text-xl tracking-tight inline;
+}
+
+.button {
+    @apply flex items-center px-3 py-2 border rounded border-black hover:text-black hover:border-black;
+}
+
+.menu {
+    @apply w-full block flex-grow lg:flex lg:items-center lg:w-auto;
+}
+
+.links {
+    @apply text-sm lg:flex-grow ml-10;
+}
+
+.link {
+    @apply block mt-4 lg:inline-block lg:mt-0 text-black hover:text-violet-600 mr-4;
+}
+

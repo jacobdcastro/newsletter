@@ -3,5 +3,6 @@
 }
 
 .connectButton {
-  @apply p-3 border-2 border-blue-500 rounded-xl;
+  @apply p-3 border-2 rounded-full bg-gradient-to-r from-blue-800 via-blue-700 to-blue-600 text-white font-semibold text-base;
+
 }

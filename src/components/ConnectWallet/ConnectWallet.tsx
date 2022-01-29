@@ -16,6 +16,7 @@ const ConnectWallet = () => {
           {...hoveredProps}
         >
           {isHovered ? 'Disconnect' : address}
+      
         </button>
       ) : (
         <button
@@ -23,6 +24,7 @@ const ConnectWallet = () => {
           onClick={() => connectWallet('injected')}
         >
           Connect Wallet
+    
         </button>
       )}
     </div>
