@@ -1,0 +1,12 @@
+
+
+.socialIcon {
+    width: 50px;
+    display: inline;
+    margin: 10px;
+}
+
+.socialsContainer {
+    width: 100%;
+    text-align: center;
+}
