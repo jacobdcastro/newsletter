@@ -72,7 +72,18 @@ export const useCreatorSignup = () => {
   );
 
   const signup = async () => {
-    if (!profileImg || !publicationImg) return;
+    if (!profileImg || !publicationImg) {
+      console.warn('🚨 Please add both images!');
+      return;
+    }
+    if (
+      username === '' ||
+      publicationName === '' ||
+      publicationDescription === ''
+    ) {
+      console.warn('🚨 Missing one or more fields!');
+      return;
+    }
 
     // upload images to IPFS
     const cid1 = await client.storeBlob(profileImg);
