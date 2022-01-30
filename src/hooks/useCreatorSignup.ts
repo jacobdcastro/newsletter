@@ -1,91 +1,91 @@
 import { useWeb3 } from '@3rdweb/hooks';
-import { ethers } from 'ethers';
+import axios from 'axios';
+import { NFTStorage } from 'nft.storage';
 import { useState } from 'react';
+import { useMutation } from 'react-query';
+import { signupPayload } from 'src/types/signup';
 import useSdk from './useSdk';
 
-const name = 'Test7';
+const client = new NFTStorage({
+  token: process.env.NEXT_PUBLIC_NFTSTORAGE_API_KEY,
+});
 
 export const useCreatorSignup = () => {
-  const { masterSdk, userSdk } = useSdk();
   const { address } = useWeb3();
-  const [nftId, setNftId] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isCompleted, setIsComleted] = useState(false);
+  const [profileImg, setProfileImg] = useState();
+  const [publicationImg, setPublicationImg] = useState();
+  const [username, setUsername] = useState('PLEASE');
+  const [publicationName, setPublicationName] = useState('PLEASE');
+  const [publicationDescription, setPublicationDescription] =
+    useState('idek tbh');
+  const [ipfs, setIpfs] = useState({ bundleDropImg: '', creatorNftImg: '' });
 
-  const masterApp = masterSdk?.getAppModule(
-    process.env.NEXT_PUBLIC_APP_MODULE_ADDRESS
-  );
+  const handleFormChange = () => {};
 
-  // Creator NFT module
-  const nftCollectionModule = masterSdk.getNFTModule(
-    process.env.NEXT_PUBLIC_NFT_COLLECTION
-  );
-
-  // TODO move this to API
-  const signUp = async () => {
-    setIsLoading(true);
-    try {
-      // TODO add sig verified minting
-      // const sigRes = await nftCollectionModule.generateSignature({
-      //   id: '123412341234',
-      //   currencyAddress: ethers.constants.AddressZero,
-      //   metadata: { help: 'idek', name },
-      //   mintEndTimeEpochSeconds:
-      //     Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
-      //   mintStartTimeEpochSeconds: Math.floor(Date.now() / 1000),
-      //   price: 0,
-      //   to: address,
-      // });
-
-      // console.log({ sigRes });
-
-      // 1 create royalty split
-      const splitsRes = await masterApp.deploySplitsModule({
-        name: `${name} Royalty Split`,
-        recipientSplits: [
-          {
-            address: address,
-            shares: 4,
-          },
-          {
-            address: process.env.NEXT_PUBLIC_APP_MODULE_ADDRESS,
-            shares: 1,
-          },
-        ],
+  // step 3 - mint creator nft to creator's wallet
+  const nftMintToMutation = useMutation(
+    (payload: { bundleDropAddress: string }) => {
+      return axios.post('/api/signup/3-nftMintTo', {
+        ...payload,
+        address,
+        username,
+        image: ipfs.creatorNftImg,
       });
-      console.log({ splitsRes });
-
-      // 2 create publication module with royalty split
-      const bundleDropRes = await masterApp.deployBundleDropModule({
-        name: `${name} Newsletter!`,
-        description: 'Just a way to talk to lemons...',
-        feeRecipient: splitsRes.address,
-        primarySaleRecipientAddress: splitsRes.address,
-      });
-
-      // 3 set minter permissions on publication module
-      await bundleDropRes.setAllRoleMembers({ minter: [address] });
-      console.log({ bundleDropRes });
-
-      console.log({ nftCollectionModule });
-
-      // 4 create new Creator NFT
-      const nftMintToRes = await nftCollectionModule.mintTo(address, {
-        name,
-        description: `${name} description`,
-        properties: {
-          creatorAddress: address,
-          bundleDropAddress: bundleDropRes.address,
-        },
-      });
-      console.log({ nftMintToRes });
-
-      setIsLoading(false);
-      setIsComleted(true);
-    } catch (error) {
-      throw new Error(error);
     }
+  );
+
+  // step 2 - create bundle drop module
+  const bundleDropMutation = useMutation(
+    (payload: { splitsModuleAddress: string }) =>
+      axios.post('/api/signup/2-bundleDropModule', {
+        ...payload,
+        address,
+        publicationName,
+        publicationDescription,
+        image: ipfs.bundleDropImg,
+      }),
+    {
+      onSuccess: ({ data }) =>
+        nftMintToMutation.mutate({ bundleDropAddress: data.bundleDropAddress }),
+    }
+  );
+
+  // step 1 - create splits module
+  const splitsMutation = useMutation(
+    () => axios.post('/api/signup/1-splitsModule', { address, username }),
+    {
+      onSuccess: ({ data }) => {
+        bundleDropMutation.mutate({
+          splitsModuleAddress: data.splitsModuleAddress,
+        });
+      },
+    }
+  );
+
+  console.log('splits', splitsMutation.data);
+  console.log('bundle', bundleDropMutation.data);
+  console.log('nft', nftMintToMutation.data);
+
+  const signup = async () => {
+    if (!profileImg || !publicationImg) return;
+
+    const cid1 = await client.storeBlob(profileImg);
+    const cid2 = await client.storeBlob(publicationImg);
+
+    setIpfs({
+      bundleDropImg: `ipfs://${cid1}`,
+      creatorNftImg: `ipfs://${cid2}`,
+    });
+
+    splitsMutation.mutate();
   };
 
-  return { signUp, isLoading, isCompleted };
+  return {
+    setUsername,
+    setPublicationName,
+    setPublicationDescription,
+    setProfileImg,
+    setPublicationImg,
+    signup,
+  };
 };

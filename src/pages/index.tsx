@@ -5,7 +5,7 @@
  * @wallet   Not required
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 // @ts-ignore
@@ -17,8 +17,6 @@ import { SubmitButton } from '../components/SubmitButton';
 import { Navbar } from '../components/Navbar';
 
 const IndexPage = () => {
-  // const { getAllIssues, createAirdrop } = usePublication();
-
   return (
     <div className={styles.container}>
       {/* @ts-ignore */}
@@ -46,8 +44,6 @@ const IndexPage = () => {
           </h1>
 
           <ConnectWallet />
-
-          {/* <SubmitButton/> */}
 
           <div className={'text-center'}>
             <div className={styles.grid}>
