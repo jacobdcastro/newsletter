@@ -3,6 +3,8 @@ import { AppProps } from 'next/app';
 import { ThirdwebWeb3Provider } from '@3rdweb/hooks';
 import '../styles/globals.css';
 import SdkContextProvider from '../utils/SdkContext';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 const supportedChainIds = [
   4, // rinkeby
@@ -19,16 +21,20 @@ const connectors = {
   },
 };
 
+const queryClient = new QueryClient();
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThirdwebWeb3Provider
-      connectors={connectors}
-      supportedChainIds={supportedChainIds}
-    >
-      <SdkContextProvider>
-        <Component {...pageProps} />
-      </SdkContextProvider>
-    </ThirdwebWeb3Provider>
+    <QueryClientProvider client={queryClient}>
+      <ThirdwebWeb3Provider
+        connectors={connectors}
+        supportedChainIds={supportedChainIds}
+      >
+        <SdkContextProvider>
+          <Component {...pageProps} />
+        </SdkContextProvider>
+      </ThirdwebWeb3Provider>
+    </QueryClientProvider>
   );
 }
 
