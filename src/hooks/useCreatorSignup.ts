@@ -3,8 +3,6 @@ import axios from 'axios';
 import { NFTStorage } from 'nft.storage';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
-import { signupPayload } from 'src/types/signup';
-import useSdk from './useSdk';
 
 const client = new NFTStorage({
   token: process.env.NEXT_PUBLIC_NFTSTORAGE_API_KEY,
@@ -12,15 +10,13 @@ const client = new NFTStorage({
 
 export const useCreatorSignup = () => {
   const { address } = useWeb3();
+  const [signupCompleted, setSignupCompleted] = useState(false);
   const [profileImg, setProfileImg] = useState();
   const [publicationImg, setPublicationImg] = useState();
-  const [username, setUsername] = useState('PLEASE');
-  const [publicationName, setPublicationName] = useState('PLEASE');
-  const [publicationDescription, setPublicationDescription] =
-    useState('idek tbh');
+  const [username, setUsername] = useState('');
+  const [publicationName, setPublicationName] = useState('');
+  const [publicationDescription, setPublicationDescription] = useState('');
   const [ipfs, setIpfs] = useState({ bundleDropImg: '', creatorNftImg: '' });
-
-  const handleFormChange = () => {};
 
   // step 3 - mint creator nft to creator's wallet
   const nftMintToMutation = useMutation(
@@ -31,6 +27,13 @@ export const useCreatorSignup = () => {
         username,
         image: ipfs.creatorNftImg,
       });
+    },
+    {
+      onSuccess: () => {
+        console.log('✅ Creator NFT Minted To Creator at:', address);
+        console.log('🚀 Sign Up Complete!');
+        setSignupCompleted(true);
+      },
     }
   );
 
@@ -45,8 +48,13 @@ export const useCreatorSignup = () => {
         image: ipfs.bundleDropImg,
       }),
     {
-      onSuccess: ({ data }) =>
-        nftMintToMutation.mutate({ bundleDropAddress: data.bundleDropAddress }),
+      onSuccess: ({ data }) => {
+        console.log(
+          '✅ Bundle Drop Module Created at:',
+          data.splitsModuleAddress
+        );
+        nftMintToMutation.mutate({ bundleDropAddress: data.bundleDropAddress });
+      },
     }
   );
 
@@ -55,6 +63,7 @@ export const useCreatorSignup = () => {
     () => axios.post('/api/signup/1-splitsModule', { address, username }),
     {
       onSuccess: ({ data }) => {
+        console.log('✅ Splits Module Created at:', data.splitsModuleAddress);
         bundleDropMutation.mutate({
           splitsModuleAddress: data.splitsModuleAddress,
         });
@@ -62,13 +71,10 @@ export const useCreatorSignup = () => {
     }
   );
 
-  console.log('splits', splitsMutation.data);
-  console.log('bundle', bundleDropMutation.data);
-  console.log('nft', nftMintToMutation.data);
-
   const signup = async () => {
     if (!profileImg || !publicationImg) return;
 
+    // upload images to IPFS
     const cid1 = await client.storeBlob(profileImg);
     const cid2 = await client.storeBlob(publicationImg);
 
@@ -77,10 +83,12 @@ export const useCreatorSignup = () => {
       creatorNftImg: `ipfs://${cid2}`,
     });
 
+    // begin thirdweb module creation process
     splitsMutation.mutate();
   };
 
   return {
+    signupCompleted,
     setUsername,
     setPublicationName,
     setPublicationDescription,
