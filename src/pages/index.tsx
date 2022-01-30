@@ -5,7 +5,7 @@
  * @wallet   Not required
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 // @ts-ignore
@@ -17,6 +17,23 @@ import { SubmitButton } from '../components/SubmitButton';
 import { Navbar } from '../components/Navbar';
 
 const IndexPage = () => {
+  // const {
+  //   signupCompleted,
+  //   setUsername,
+  //   setPublicationName,
+  //   setPublicationDescription,
+  //   setProfileImg,
+  //   setPublicationImg,
+  //   signup,
+  //   isLoading,
+  // } = useCreatorSignup();
+
+  // useEffect(() => {
+  //   setUsername('jacob');
+  //   setPublicationName('my newsletter');
+  //   setPublicationDescription('reeeaalllyyyyy cool newsletter');
+  // }, []);
+
   return (
     <div className={styles.container}>
       {/* @ts-ignore */}
@@ -37,6 +54,17 @@ const IndexPage = () => {
               alt="newsnft logo"
             />
           </span>
+
+          {/* <input type="file" onChange={e => setProfileImg(e.target.files[0])} />
+          <input
+            type="file"
+            onChange={e => setPublicationImg(e.target.files[0])}
+          />
+          <div>
+            <button onClick={() => signup()}>
+              {isLoading ? 'loading...' : 'sign up...'}
+            </button>
+          </div> */}
 
           <h1 className={styles.title}>
             Your News, Minted

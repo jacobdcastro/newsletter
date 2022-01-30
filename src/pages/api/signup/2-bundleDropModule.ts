@@ -1,9 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { Publication } from 'src/types/db';
+import clientPromise from 'src/utils/db';
 import { masterSdk as sdk } from 'src/utils/masterSdk';
 
 type Response = { bundleDropAddress: string };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
+  const client = await clientPromise;
+  const db = client.db('Creators');
+
+  let pubs = db.collection('publications').find({}).toArray();
+  pubs = JSON.parse(JSON.stringify(pubs));
+
   const masterApp = sdk.getAppModule(
     process.env.NEXT_PUBLIC_APP_MODULE_ADDRESS
   );
@@ -27,6 +35,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
 
   // 3 set minter permissions on publication module
   await bundleDropRes.setAllRoleMembers({ minter: [address] });
+
+  // 4 add publication to db
+  await db.collection('Publications').insertOne({
+    creatorAddress: address,
+    publicationAddress: bundleDropRes.address,
+    subscribers: [],
+    newsletters: [],
+  } as Publication);
 
   console.log({ bundleDropRes });
 

@@ -1,0 +1,31 @@
+{
+  "creatorAddress": "0x...",
+  "publicationAddress": "0x...",
+  "subscribers": [
+    {
+      "id": "0",
+      "address": "0x...",
+      "dateSubscribed": 1643502731124,
+      "active": true
+    },
+    {
+      "id": "1",
+      "address": "0x...",
+      "dateSubscribed": 1643502733886,
+      "active": false
+    }
+  ],
+  "newsletters": [
+    {
+      "_id": "123",
+      "creatorAddress": "0x...",
+      "bundleDropAddress": "0x...",
+      "tokenId": "0x...",
+      "whitelistAtPublish": [],
+      "lastSaved": 1643502731124,
+      "isPublished": false,
+      "publishDate": 1643502731124,
+      "content": "..."
+    }
+  ]
+}

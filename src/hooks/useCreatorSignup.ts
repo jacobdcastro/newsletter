@@ -10,6 +10,7 @@ const client = new NFTStorage({
 
 export const useCreatorSignup = () => {
   const { address } = useWeb3();
+  const [isLoading, setIsLoading] = useState(false);
   const [signupCompleted, setSignupCompleted] = useState(false);
   const [profileImg, setProfileImg] = useState();
   const [publicationImg, setPublicationImg] = useState();
@@ -32,6 +33,7 @@ export const useCreatorSignup = () => {
       onSuccess: () => {
         console.log('✅ Creator NFT Minted To Creator at:', address);
         console.log('🚀 Sign Up Complete!');
+        setIsLoading(false);
         setSignupCompleted(true);
       },
     }
@@ -72,6 +74,7 @@ export const useCreatorSignup = () => {
   );
 
   const signup = async () => {
+    setIsLoading(true);
     if (!profileImg || !publicationImg) {
       console.warn('🚨 Please add both images!');
       return;
@@ -99,6 +102,7 @@ export const useCreatorSignup = () => {
   };
 
   return {
+    isLoading,
     signupCompleted,
     setUsername,
     setPublicationName,
