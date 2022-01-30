@@ -13,8 +13,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
 
   // 4 create new Creator NFT
   const nftMintToRes = await nftCollectionModule.mintTo(address, {
-    name: username,
-    description: `${username} description`,
+    name: `${username} Creator Badge`,
+    description: `This NFT grants ${username} permission to publish content with their wallet ${address}!`,
     image,
     properties: {
       creatorAddress: address,

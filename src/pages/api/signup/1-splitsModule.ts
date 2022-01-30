@@ -12,6 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
 
   const splitsRes = await masterApp.deploySplitsModule({
     name: `${username} Royalty Split`,
+    description: `This split empowers ${username} to recieve royalties on all NFT sales of their publication`,
     recipientSplits: [
       {
         address: address,
