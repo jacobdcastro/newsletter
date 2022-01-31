@@ -5,10 +5,12 @@ export const useCreator = () => {
   const { userSdk } = useSdk();
   const { address } = useWeb3();
 
-  const module = userSdk?.getNFTModule(process.env.NEXT_PUBLIC_NFT_COLLECTION);
+  const nftModule = userSdk?.getNFTModule(
+    process.env.NEXT_PUBLIC_NFT_COLLECTION
+  );
 
   const checkCreatorStatus = async () => {
-    const creatorNft = await module.getOwned(address);
+    const creatorNft = await nftModule.getOwned(address);
     if (creatorNft.length > 0) {
       const publication = await userSdk.getBundleDropModule(
         creatorNft[0].properties.bundleDropAddress.toString()
@@ -17,17 +19,14 @@ export const useCreator = () => {
     }
   };
 
-  // const metadatas = [
-  //   {
-  //     name: 'Issue #3',
-  //     description: 'This is a cool NFT',
-  //     image: 'https://lol.com',
-  //   },
-  // ];
+  const publishNewsletter = async () => {
+    // 1 fetch subscriber list
 
-  // const createAirdrop = async () => {
-  //   await module.createBatch(metadatas);
-  // };
+    // 1 create batch on thirdweb
+    const batchRes = await module.createBatch(metadatas);
+
+    // 2 save to Newsletter[] in MongoDB
+  };
 
   // const getAllIssues = async () => {
   //   const nfts = await module.getAll();
