@@ -49,6 +49,7 @@ const PublicationListing = ({ pub }: Props) => {
         </li>
       </ul>
       <div>
+        {isSubscribed ? 'welp' : 'subscribe now'}
         <button
           className="p-3 border-3 border-black border-solid"
           onClick={() => subscribe()}

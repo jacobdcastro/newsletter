@@ -8,7 +8,7 @@ const client = new NFTStorage({
   token: process.env.NEXT_PUBLIC_NFTSTORAGE_API_KEY,
 });
 
-const useCreatorSignup = () => {
+const useCreatorSignup = setMessage => {
   const { address } = useWeb3();
   const [isLoading, setIsLoading] = useState(false);
   const [signupCompleted, setSignupCompleted] = useState(false);
@@ -35,6 +35,7 @@ const useCreatorSignup = () => {
         console.log('🚀 Sign Up Complete!');
         setIsLoading(false);
         setSignupCompleted(true);
+        setMessage('');
       },
     }
   );
@@ -55,6 +56,7 @@ const useCreatorSignup = () => {
           '✅ Bundle Drop Module Created at:',
           data.bundleDropAddress
         );
+        setMessage('Minting Creator NFT to your wallet...');
         nftMintToMutation.mutate({ bundleDropAddress: data.bundleDropAddress });
       },
     }
@@ -66,6 +68,7 @@ const useCreatorSignup = () => {
     {
       onSuccess: ({ data }) => {
         console.log('✅ Splits Module Created at:', data.splitsModuleAddress);
+        setMessage('Creating Bundle Drop Module...');
         bundleDropMutation.mutate({
           splitsModuleAddress: data.splitsModuleAddress,
         });
@@ -100,6 +103,7 @@ const useCreatorSignup = () => {
       );
 
       try {
+        setMessage('Uploading Images to IPFS...');
         // upload images to IPFS
         const cid1 = await client.storeBlob(profileImg);
         const cid2 = await client.storeBlob(publicationImg);
@@ -108,7 +112,10 @@ const useCreatorSignup = () => {
           creatorNftImg: `ipfs://${cid2}`,
         });
 
+        console.log({ cid1, cid2 });
+
         // begin thirdweb module creation process
+        setMessage('Creating Splits Module...');
         splitsMutation.mutate();
       } catch (error) {
         setIsLoading(false);

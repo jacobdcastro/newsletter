@@ -1,14 +1,13 @@
-import React from 'react';
-import s from './SubmitButton.module.css';
+import React from 'react'
+import s from './SubmitButton.module.css'
 
-const SubmitButton = () => {
+export default function SubmitButton(props) {
+
+
   return (
     <div className={s.root}>
       <button className={s.submitButton}>
-        <span className={s.buttonText}>Submit a Task</span>
-      </button>
+        <span className={s.buttonText}>{props.text}</span></button>
     </div>
   );
-};
-
-export default SubmitButton;
+}

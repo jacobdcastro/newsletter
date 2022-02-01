@@ -11,7 +11,7 @@ const client = new NFTStorage({
   token: process.env.NEXT_PUBLIC_NFTSTORAGE_API_KEY,
 });
 
-export const useCreator = () => {
+export const useCreator = setPublished => {
   const { userSdk } = useContext(SdkContext);
   const { address } = useWeb3();
   const [newsletterName, setNewsletterName] = useState<string>('');
@@ -73,6 +73,7 @@ export const useCreator = () => {
       onSuccess: ({ data }) => {
         console.log(data);
         setIsLoading(false);
+        setPublished(true);
       },
       onError: error => {
         console.error(error);
@@ -115,6 +116,8 @@ export const useCreator = () => {
         data.publicationAddress
       );
 
+      console.log({ bundleDropModule });
+
       // create new NFT in publication collection
       const batchRes = await bundleDropModule.createBatch([
         {
@@ -123,6 +126,8 @@ export const useCreator = () => {
           image: `ipfs://${cid}`,
         },
       ]);
+
+      console.log({ batchRes });
 
       const newsletterTokenId = batchRes[0];
 
