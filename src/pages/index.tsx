@@ -11,22 +11,14 @@ import Image from 'next/image';
 // @ts-ignore
 import styles from '../styles/Home.module.css';
 // import { usePublication } from '../hooks/useCreator';
-import { useCreatorSignup } from '../hooks/useCreatorSignup';
+import useCreatorSignup from '../hooks/useCreatorSignup';
 import { ConnectWallet } from '../components/ConnectWallet';
 import { SubmitButton } from '../components/SubmitButton';
 import { Navbar } from '../components/Navbar';
 
 const IndexPage = () => {
-  // const {
-  //   signupCompleted,
-  //   setUsername,
-  //   setPublicationName,
-  //   setPublicationDescription,
-  //   setProfileImg,
-  //   setPublicationImg,
-  //   signup,
-  //   isLoading,
-  // } = useCreatorSignup();
+  const hi = useCreatorSignup();
+  console.log(hi);
 
   // useEffect(() => {
   //   setUsername('jacob');
