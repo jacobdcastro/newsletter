@@ -31,8 +31,8 @@ const useCreatorSignup = () => {
     },
     {
       onSuccess: () => {
-        console.log(' Creator NFT Minted To Creator at:', address);
-        console.log(' Sign Up Complete!');
+        console.log('✅ Creator NFT Minted To Creator wallet', address);
+        console.log('🚀 Sign Up Complete!');
         setIsLoading(false);
         setSignupCompleted(true);
       },
@@ -52,9 +52,10 @@ const useCreatorSignup = () => {
     {
       onSuccess: ({ data }) => {
         console.log(
-          ' Bundle Drop Module Created at:',
-          data.splitsModuleAddress
+          '✅ Bundle Drop Module Created at:',
+          data.bundleDropAddress
         );
+        nftMintToMutation.mutate({ bundleDropAddress: data.bundleDropAddress });
       },
     }
   );
@@ -64,50 +65,54 @@ const useCreatorSignup = () => {
     () => axios.post('/api/signup/1-splitsModule', { address, username }),
     {
       onSuccess: ({ data }) => {
-        console.log(' Splits Module Created at:', data.splitsModuleAddress);
+        console.log('✅ Splits Module Created at:', data.splitsModuleAddress);
+        bundleDropMutation.mutate({
+          splitsModuleAddress: data.splitsModuleAddress,
+        });
       },
     }
   );
 
-  const signup = useCallback(async () => {
-    setIsLoading(true);
-    if (!profileImg || !publicationImg) {
-      console.warn(' Please add both images!');
-      return;
-    }
-    if (
-      username === '' ||
-      publicationName === '' ||
-      publicationDescription === ''
-    ) {
-      console.warn('Missing one or more fields!');
-      return;
-    }
+  const signup = useCallback(
+    async e => {
+      e.preventDefault();
+      setIsLoading(true);
+      if (!profileImg || !publicationImg) {
+        console.warn(' Please add both images!');
+        return;
+      }
+      if (
+        username === '' ||
+        publicationName === '' ||
+        publicationDescription === ''
+      ) {
+        console.warn('Missing one or more fields!');
+        return;
+      }
 
-    try {
-      // upload images to IPFS
-      const cid1 = await client.storeBlob(profileImg);
-      const cid2 = await client.storeBlob(publicationImg);
-      setIpfs({
-        bundleDropImg: `ipfs://${cid1}`,
-        creatorNftImg: `ipfs://${cid2}`,
-      });
-      // begin thirdweb module creation process
-      await splitsMutation.mutateAsync();
-      await bundleDropMutation.mutateAsync({
-        splitsModuleAddress: splitsMutation.data.data.splitsModuleAddress,
-      });
-      await nftMintToMutation.mutateAsync({
-        bundleDropAddress: bundleDropMutation.data.data.bundleDropAddress,
-      });
-    } catch (error) {}
-  }, [
-    profileImg,
-    publicationDescription,
-    publicationImg,
-    publicationName,
-    username,
-  ]);
+      try {
+        // upload images to IPFS
+        const cid1 = await client.storeBlob(profileImg);
+        const cid2 = await client.storeBlob(publicationImg);
+        setIpfs({
+          bundleDropImg: `ipfs://${cid1}`,
+          creatorNftImg: `ipfs://${cid2}`,
+        });
+
+        // begin thirdweb module creation process
+        splitsMutation.mutate();
+      } catch (error) {
+        setIsLoading(false);
+      }
+    },
+    [
+      profileImg,
+      publicationDescription,
+      publicationImg,
+      publicationName,
+      username,
+    ]
+  );
 
   // return 'hi';
 
