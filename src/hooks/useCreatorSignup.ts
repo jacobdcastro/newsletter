@@ -1,22 +1,22 @@
 import { useWeb3 } from '@3rdweb/hooks';
 import axios from 'axios';
 import { NFTStorage } from 'nft.storage';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useMutation } from 'react-query';
 
 const client = new NFTStorage({
   token: process.env.NEXT_PUBLIC_NFTSTORAGE_API_KEY,
 });
 
-export const useCreatorSignup = () => {
+const useCreatorSignup = () => {
   const { address } = useWeb3();
   const [isLoading, setIsLoading] = useState(false);
   const [signupCompleted, setSignupCompleted] = useState(false);
-  const [profileImg, setProfileImg] = useState();
-  const [publicationImg, setPublicationImg] = useState();
   const [username, setUsername] = useState('');
   const [publicationName, setPublicationName] = useState('');
   const [publicationDescription, setPublicationDescription] = useState('');
+  const [profileImg, setProfileImg] = useState<File | undefined>();
+  const [publicationImg, setPublicationImg] = useState<File | undefined>();
   const [ipfs, setIpfs] = useState({ bundleDropImg: '', creatorNftImg: '' });
 
   // step 3 - mint creator nft to creator's wallet
@@ -31,8 +31,8 @@ export const useCreatorSignup = () => {
     },
     {
       onSuccess: () => {
-        console.log('✅ Creator NFT Minted To Creator at:', address);
-        console.log('🚀 Sign Up Complete!');
+        console.log(' Creator NFT Minted To Creator at:', address);
+        console.log(' Sign Up Complete!');
         setIsLoading(false);
         setSignupCompleted(true);
       },
@@ -52,10 +52,9 @@ export const useCreatorSignup = () => {
     {
       onSuccess: ({ data }) => {
         console.log(
-          '✅ Bundle Drop Module Created at:',
+          ' Bundle Drop Module Created at:',
           data.splitsModuleAddress
         );
-        nftMintToMutation.mutate({ bundleDropAddress: data.bundleDropAddress });
       },
     }
   );
@@ -65,18 +64,15 @@ export const useCreatorSignup = () => {
     () => axios.post('/api/signup/1-splitsModule', { address, username }),
     {
       onSuccess: ({ data }) => {
-        console.log('✅ Splits Module Created at:', data.splitsModuleAddress);
-        bundleDropMutation.mutate({
-          splitsModuleAddress: data.splitsModuleAddress,
-        });
+        console.log(' Splits Module Created at:', data.splitsModuleAddress);
       },
     }
   );
 
-  const signup = async () => {
+  const signup = useCallback(async () => {
     setIsLoading(true);
     if (!profileImg || !publicationImg) {
-      console.warn('🚨 Please add both images!');
+      console.warn(' Please add both images!');
       return;
     }
     if (
@@ -84,22 +80,36 @@ export const useCreatorSignup = () => {
       publicationName === '' ||
       publicationDescription === ''
     ) {
-      console.warn('🚨 Missing one or more fields!');
+      console.warn('Missing one or more fields!');
       return;
     }
 
-    // upload images to IPFS
-    const cid1 = await client.storeBlob(profileImg);
-    const cid2 = await client.storeBlob(publicationImg);
+    try {
+      // upload images to IPFS
+      const cid1 = await client.storeBlob(profileImg);
+      const cid2 = await client.storeBlob(publicationImg);
+      setIpfs({
+        bundleDropImg: `ipfs://${cid1}`,
+        creatorNftImg: `ipfs://${cid2}`,
+      });
+      // begin thirdweb module creation process
+      await splitsMutation.mutateAsync();
+      await bundleDropMutation.mutateAsync({
+        splitsModuleAddress: splitsMutation.data.data.splitsModuleAddress,
+      });
+      await nftMintToMutation.mutateAsync({
+        bundleDropAddress: bundleDropMutation.data.data.bundleDropAddress,
+      });
+    } catch (error) {}
+  }, [
+    profileImg,
+    publicationDescription,
+    publicationImg,
+    publicationName,
+    username,
+  ]);
 
-    setIpfs({
-      bundleDropImg: `ipfs://${cid1}`,
-      creatorNftImg: `ipfs://${cid2}`,
-    });
-
-    // begin thirdweb module creation process
-    splitsMutation.mutate();
-  };
+  // return 'hi';
 
   return {
     isLoading,
@@ -112,3 +122,5 @@ export const useCreatorSignup = () => {
     signup,
   };
 };
+
+export default useCreatorSignup;

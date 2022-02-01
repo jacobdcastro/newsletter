@@ -40,7 +40,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
   await db.collection('Publications').insertOne({
     creatorAddress: address,
     publicationAddress: bundleDropRes.address,
-    subscribers: [],
+    subscribers: [
+      { dateSubscribed: Date.now(), active: true, address: '0x12345' },
+      { dateSubscribed: Date.now(), active: true, address: '0x67890' },
+      { dateSubscribed: Date.now(), active: false, address: '0xabcde' },
+    ],
     newsletters: [],
   } as Publication);
 

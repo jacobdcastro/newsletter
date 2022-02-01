@@ -6,13 +6,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const db = await client.db('Creators');
 
   if (req.method === 'GET') {
+    const { creatorAddress } = req.query;
     // find by single token
-    if (req.body.publicationTokenId) {
-      let pubs = await db
+    if (creatorAddress) {
+      let publicationDoc = await db
         .collection('Publications')
-        .find({ tokenId: req.body.publicationTokenId });
+        .findOne({ creatorAddress });
+      res.status(200).json(publicationDoc);
     } else {
-      // get all publications ever
+      res.status(400).send('No creatorAddress provided!');
     }
   }
 };
