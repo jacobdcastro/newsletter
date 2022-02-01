@@ -50,12 +50,15 @@ const SubscriberDashboardPage = (props: Props) => {
               information about Next
             </p>
 
+            <ConnectWallet />
+
             <div className={styles.card}>
-              <ConnectWallet />
               <h2 className={'font-bold'}>Your Newsletters:</h2>
               <NewsNFTCollection />
               <br />
-              <SubmitButton />
+              <a href="/signup">
+              <SubmitButton text={'Become a Creator!'} />
+              </a>
             </div>
           </div>
         </div>
