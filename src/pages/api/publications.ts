@@ -14,6 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .findOne({ creatorAddress });
       res.status(200).json(publicationDoc);
     } else {
+      // get all publications ever
       res.status(400).send('No creatorAddress provided!');
     }
   }

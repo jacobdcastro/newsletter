@@ -16,8 +16,6 @@ const TestCreatePublication = (props: Props) => {
     signup,
   } = useCreatorSignup();
 
-  const { address } = useWeb3();
-
   const {
     publishNewsletter,
     setNewsletterName,
