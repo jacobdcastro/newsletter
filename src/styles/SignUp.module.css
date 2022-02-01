@@ -1,0 +1,74 @@
+.card {
+  margin: 1rem 0 1rem 0;
+  padding: 1rem;
+  text-align: left;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  max-width: 500px;
+  min-height: 325px;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 1) 10%,
+    rgba(184, 176, 231, 0.753) 140%
+  );
+  filter: drop-shadow(10px 5px 40px #c4c4c4);
+}
+
+.card:hover,
+.card:focus,
+.card:active {
+  color: #0070f3;
+  border-color: #0070f3;
+}
+
+.card h2 {
+  margin: 1rem 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.card p {
+  margin: 0;
+  /* font-size: 1.25rem; */
+  line-height: 1.5;
+}
+
+.formTable {
+  display: table;
+  @apply mx-2 my-2 px-2 py-2;
+}
+.pTable {
+  display: table-row;
+}
+.labelTable {
+  display: table-cell;
+}
+
+.inputTable {
+  @apply mx-2 my-2 px-2 py-2;
+  display: table-cell;
+}
+
+.inputTableLong {
+  @apply mx-2 my-2 px-2 py-2 h-24 table-cell;
+  display: table-cell;
+}
+
+.hexagon {
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background-size: cover;
+  margin: 10px auto;
+  height: 200px;
+  width: 200px;      
+}
+
+.root {
+  @apply flex flex-col justify-center items-center;
+}
+
+.submitButton {
+  @apply p-3 border-2 rounded-full bg-gradient-to-r from-blue-800 via-blue-700 to-blue-600 h-8 flex flex-col justify-center items-center text-xs text-white font-semibold;
+}

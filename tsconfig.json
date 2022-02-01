@@ -4,8 +4,8 @@
     "paths": {
       "@components/*": ["src/components/*"]
     },
-    "target": "ES2016",
-    "module": "CommonJS",
+    "target": "es2017",
+    "module": "commonjs",
     "allowJs": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

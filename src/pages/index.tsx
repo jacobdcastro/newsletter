@@ -13,8 +13,8 @@ import styles from '../styles/Home.module.css';
 // import { usePublication } from '../hooks/useCreator';
 import useCreatorSignup from '../hooks/useCreatorSignup';
 import { ConnectWallet } from '../components/ConnectWallet';
-import { SubmitButton } from '../components/SubmitButton';
 import { Navbar } from '../components/Navbar';
+import { DashLink } from '../components/DashLink';
 
 const IndexPage = () => {
   const hi = useCreatorSignup();
@@ -68,19 +68,12 @@ const IndexPage = () => {
           <div className={'text-center'}>
             <div className={styles.grid}>
               <div className={styles.card}>
-                <h2 className={'font-bold'}>Headline</h2>
+                <h2 className={'font-bold'}>Let's Get Started 🚀</h2>
                 <p className={'text-sm'}>
-                  Find in-depth information about Next.js features and API. Find
-                  in-depth information about Next.js features and API/ Find
-                  in-depth information about Next
+                NewsNFT is a platform for experienced web3 enthusiasts and the NFT-curious alike. 😁 Combining the awesome features of both NFTs and newsletters, creators can mint their newsletters on the blockchain and airdrop them to their subscribers!
                 </p>
                 <br />
-                <a href="/dashboard/subscriber">
-                  {' '}
-                  <h4 className={'font-semibold text-violet-600'}>
-                    Dashboard &rarr;
-                  </h4>
-                </a>
+<DashLink/>
               </div>
             </div>
           </div>
