@@ -1,10 +1,12 @@
 export interface Subscriber {
+  _id?: string;
   address: string;
   dateSubscribed: number;
   active: boolean;
 }
 
 export interface Newsletter {
+  _id?: string;
   creatorAddress: string;
   bundleDropAddress: string;
   tokenId: string;
@@ -16,6 +18,7 @@ export interface Newsletter {
 }
 
 export interface Publication {
+  _id?: string;
   creatorAddress: string;
   publicationAddress: string;
   subscribers: Subscriber[];
