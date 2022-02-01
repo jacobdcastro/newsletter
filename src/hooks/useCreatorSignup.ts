@@ -77,18 +77,27 @@ const useCreatorSignup = () => {
     async e => {
       e.preventDefault();
       setIsLoading(true);
-      if (!profileImg || !publicationImg) {
-        console.warn(' Please add both images!');
-        return;
-      }
+
       if (
         username === '' ||
         publicationName === '' ||
         publicationDescription === ''
       ) {
         console.warn('Missing one or more fields!');
+        setIsLoading(false);
         return;
       }
+
+      if (!profileImg || !publicationImg) {
+        console.warn(' Please add both images!');
+        setIsLoading(false);
+        return;
+      }
+
+      console.log(
+        '⏳ Heads up! This may take a few minutes.',
+        'Please be patient and do NOT leave the page or refresh!'
+      );
 
       try {
         // upload images to IPFS

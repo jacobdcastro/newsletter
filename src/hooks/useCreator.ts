@@ -11,12 +11,14 @@ const client = new NFTStorage({
   token: process.env.NEXT_PUBLIC_NFTSTORAGE_API_KEY,
 });
 
-const publicationAddress = '0x22Dc8B29D437f40520DEe9537c27b6EE34c7bE3c';
-
 export const useCreator = () => {
   const { userSdk } = useContext(SdkContext);
   const { address } = useWeb3();
+  const [newsletterName, setNewsletterName] = useState<string>('');
+  const [newsletterDescription, setNewsletterDescription] =
+    useState<string>('');
   const [newsletterImg, setNewsletterImg] = useState<File | null>(null);
+  const [newsletterContent, setNewsletterContent] = useState<string>('');
   const [creatorNft, setCreatorNft] = useState<NFTMetadata | null | undefined>(
     undefined
   );
@@ -57,21 +59,53 @@ export const useCreator = () => {
     { enabled: !!address }
   );
 
-  // const { mutate, data } = useMutation(
-  //   ({ publicationAddress, subscribers, newsletterTokenId }) => {
-  //     return axios.post('/api/newsletter/publish', {
-  //       creatorAddress: address,
-  //       publicationAddress,
-  //     });
-  //   },
-  //   { onSuccess: ({ data }) => console.log(data) }
-  // );
+  const publish = useMutation(
+    (payload: { publicationAddress: string; newsletterTokenId: string }) => {
+      const { publicationAddress, newsletterTokenId } = payload;
+      return axios.post('/api/newsletter/publish', {
+        creatorAddress: address,
+        publicationAddress,
+        newsletterTokenId,
+        newsletterContent,
+      });
+    },
+    {
+      onSuccess: ({ data }) => {
+        console.log(data);
+        setIsLoading(false);
+      },
+      onError: error => {
+        console.error(error);
+        setIsLoading(false);
+      },
+    }
+  );
 
   // SHOULD already have whitelist in state
-  const publishNewsletter = async () => {
-    if (!publicationData || !newsletterImg || !userSdk) return;
+  const publishNewsletter = async e => {
+    e.preventDefault();
+
+    if (!publicationData || !userSdk) {
+      console.error('Missing important data and/or sdk!');
+      return;
+    }
+    if (
+      newsletterName === '' ||
+      newsletterDescription === '' ||
+      newsletterContent === '' ||
+      !newsletterImg
+    ) {
+      console.error('Cannot submit empty fields!');
+      return;
+    }
+
     const { data } = publicationData;
+
     setIsLoading(true);
+    console.log(
+      '⏳ Heads up! This may take a few minutes.',
+      'Please be patient and do NOT leave the page or refresh!'
+    );
     try {
       // upload image to IPFS
       const cid = await client.storeBlob(newsletterImg);
@@ -84,24 +118,33 @@ export const useCreator = () => {
       // create new NFT in publication collection
       const batchRes = await bundleDropModule.createBatch([
         {
-          name: 'Very First Newsletter Airdrop!!',
-          description: 'Soooooooooo this should be cool',
+          name: newsletterName,
+          description: newsletterContent,
           image: `ipfs://${cid}`,
         },
       ]);
 
-      console.log(batchRes);
       const newsletterTokenId = batchRes[0];
 
-      const newsletter = await bundleDropModule.get(newsletterTokenId);
+      const newsletterNft = await bundleDropModule.get(newsletterTokenId);
 
-      console.log({ newsletter, data });
-      setIsLoading(false);
+      console.log({ newsletterNft, data });
+
       // 2 save to Newsletter[] in MongoDB
+      publish.mutate({
+        newsletterTokenId,
+        publicationAddress: data.publicationAddress,
+      });
     } catch (error) {
+      console.error(error);
       setIsLoading(false);
     }
   };
+
+  const isCreator = useMemo(
+    () => (creatorNft === undefined ? undefined : creatorNft !== null),
+    [creatorNft]
+  );
 
   // const getAllIssues = async () => {
   //   const nfts = await module.getAll();
@@ -109,12 +152,16 @@ export const useCreator = () => {
   // };
 
   return {
-    isCreator: creatorNft === undefined ? undefined : creatorNft !== null,
+    isCreator,
     publication: publicationData?.data,
     publicationIsLoading,
     publicationIsError,
 
+    setNewsletterName,
+    setNewsletterDescription,
     setNewsletterImg,
+    setNewsletterContent,
+
     publishNewsletter,
     isLoading,
   };
